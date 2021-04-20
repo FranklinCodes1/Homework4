@@ -1,3 +1,16 @@
+//GIVEN I am taking a code quiz
+// WHEN I click the start button
+// THEN a timer starts and I am presented with a question
+// WHEN I answer a question
+// THEN I am presented with another question
+// WHEN I answer a question incorrectly
+// THEN time is subtracted from the clock
+// WHEN all questions are answered or the timer reaches 0
+// THEN the game is over
+// WHEN the game is over
+// THEN I can save my initials and my score
+
+
 const questions = [
     {
         question: "Inside which HTML element do we put the JavaScript?",
@@ -11,8 +24,8 @@ const questions = [
     },
     {
         question: "Arrays in JavaScript can be used to store _____.",
-        choices: ["a. numbers and strings", "b. other arrays", "c. booleans", "d. all of the above"],
-        answer: "b. other arrays"
+        choices: ["a. numbers and strings", "b. mulitple values in a single variable", "c. booleans", "d. all of the above"],
+        answer: "b. mulitple values in a single variable"
     },
     {
         question: "Commonly used data types DO NOT include:",
@@ -23,11 +36,6 @@ const questions = [
         question: "How do you create a function in JavaScript",
         choices: ["a. function = myFunction()", "b. function myFunction()", "c. function:myFunction()", "d. createMyFunction()"],
         answer: "b. function myFunction()"
-    },
-    {
-        question: "How do you call a function named myFunction?",
-        choices: ["a. call myFunction()", "b. call function myFunction()", "c. myFunction()", "d. call myFunction"],
-        answer: "c. myFunctions()"
     },
     {
         question: "To see if two variables are equal in an if / else statement you would use ____.",
@@ -61,6 +69,10 @@ const questions = [
     }
 ];
 
+for (var i = 0; i < questions[0].choices.length; i++) {
+    console.log(questions[0].choices[i])
+}
+//console.log("choices array", questions[0].choices.length);
 // grab references to elements
 var timer = document.getElementById("timer");
 var timeLeft = document.getElementById("timeLeft");
@@ -90,21 +102,18 @@ var clearHighScoreBtn = document.getElementById("clearHighScoreBtn");
 var viewHighScore = document.getElementById("viewHighScore");
 var listOfHighScores = document.getElementById("listOfHighScores");
 
-// define other variables
+
 var correctAns = 0;
 var questionNum = 0;
 var scoreResult;
 var questionIndex = 0;
 
-/**
- * FUNCTIONS
- */
 
-// WHEN I click the start button, timer starts
+// timer will start once button is clicked
 var totalTime = 151;
 function newQuiz() {
     questionIndex = 0;
-    totalTime = 150;
+    totalTime = 150; 
     timeLeft.textContent = totalTime;
     initialInput.textContent = "";
 
@@ -113,7 +122,7 @@ function newQuiz() {
     timer.style.display = "block";
     timesUp.style.display = "none";
 
-    var startTimer = setInterval(function() {
+    var startTimer = setInterval(function() { //timer starts /ends
         totalTime--;
         timeLeft.textContent = totalTime;
         if(totalTime <= 0) {
@@ -127,10 +136,7 @@ function newQuiz() {
     showQuiz();
 };
 
-// console.log(questions[questionIndex].question);
-// console.log(questions[questionIndex].choices);
 
-// then presented with questions and choices
 function showQuiz() {
     nextQuestion();
 }
@@ -152,6 +158,8 @@ function checkAnswer(answer) {
 
     if (questions[questionIndex].answer === questions[questionIndex].choices[answer]) {
         // correct answer, add 1 score to final score
+        console.log(questions[questionIndex].answer)
+        console.log(questions[questionIndex].choices[answer])
         correctAns++;
         // console.log(correctAns);
         answerCheck.textContent = "Correct!";
@@ -181,7 +189,7 @@ function chooseC() { checkAnswer(2); }
 function chooseD() { checkAnswer(3); }
 
 // when all questions are answered or timer reaches 0, game over
-function gameOver() {
+function gameOver() { /// when does it say gameOVER!!!times up!
     summary.style.display = "block";
     questionDiv.style.display = "none";
     startDiv.style.display = "none";
@@ -189,14 +197,14 @@ function gameOver() {
     timesUp.style.display = "block";
 
     // show final score
-    finalScore.textContent = correctAns;
+    finalScore.textContent = correctAns; //displays only the correctly answered.
 }
 
 // enter initial and store highscore in local storage
 function storeHighScores(event) {
-    event.preventDefault();
+    event.preventDefault(); //will keep refresh from deleting data stored..
 
-    // stop function is initial is blank
+    // initials unless page is refreshed
     if (initialInput.value === "") {
         alert("Please enter your initials!");
         return;
@@ -208,7 +216,7 @@ function storeHighScores(event) {
     summary.style.display = "none";
     highScoreSection.style.display = "block";   
 
-    // store scores into local storage
+   
     var savedHighScores = localStorage.getItem("high scores");
     var scoresArray;
 
@@ -226,15 +234,14 @@ function storeHighScores(event) {
     console.log(userScore);
     scoresArray.push(userScore);
 
-    // stringify array in order to store in local
     var scoresArrayString = JSON.stringify(scoresArray);
     window.localStorage.setItem("high scores", scoresArrayString);
     
-    // show current highscores
+   
     showHighScores();
 }
 
-// function to show high scores
+
 var i = 0;
 function showHighScores() {
 
@@ -247,8 +254,8 @@ function showHighScores() {
 
     var savedHighScores = localStorage.getItem("high scores");
 
-    // check if there is any in local storage
-    if (savedHighScores === null) {
+    
+    if (savedHighScores === null) { //null still meaning a value, not zero...but in this case.. empty..
         return;
     }
     console.log(savedHighScores);
@@ -262,9 +269,6 @@ function showHighScores() {
     }
 }
 
-/**
- * ADD EVENT LISTENERS
- */
 
 startQuizBtn.addEventListener("click", newQuiz);
 choiceA.addEventListener("click", chooseA);
